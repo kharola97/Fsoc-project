@@ -15,7 +15,7 @@ module.exports.createUser = async function (req, res) {
     try {
       let body = req.body;
       const {  Firstname, Lastname, phone, email, password } = body;
-      if (Object.keys(body).length == 0) {
+      if (Object.keys(body).length == 0|| !Firstname || !Lastname || !phone || !email || !password) {
         return res
           .status(400)
           .send({ status: false, message: "Please enter some data in body." });
