@@ -1,8 +1,10 @@
 const mongoose = require("mongoose")
+require("dotenv").config()
 
+const url = process.env.DB_URL
 
 module.exports.connectDatabase = () => {
-    mongoose.connect("mongodb+srv://ankitdb:ankit321@cluster0.nz06g9j.mongodb.net/Project")
+    mongoose.connect(url,{useNewUrlParser:true})
       .then(() => console.log("MongoDB is connected"))
       .catch((err) => console.log(err));
   };

@@ -9,6 +9,8 @@ const {
 
 const jwt = require("jsonwebtoken")
 
+const {Email,createUser,findUser,checkPhone} = require("../services/userser")
+
 module.exports.createUser = async function (req, res) {
     try {
       let body = req.body;
@@ -18,7 +20,7 @@ module.exports.createUser = async function (req, res) {
           .status(400)
           .send({ status: false, message: "Please enter some data in body." });
       }
-      
+    
       if (!Firstname)
         return res
           .status(400)
@@ -27,22 +29,22 @@ module.exports.createUser = async function (req, res) {
       if (!isValidName(Firstname.trim()))
         return res
           .status(400)
-          .send({ status: false, message: "Name only contains Alphabets." });
+          .send({ status: false, message: "Name can only contains Alphabets." });
       
           if (!Lastname)
         return res
           .status(400)
-          .send({ status: false, message: "Please enter name in body." });
+          .send({ status: false, message: "last name is required." });
   
       if (!isValidName(Lastname.trim()))
         return res
           .status(400)
-          .send({ status: false, message: "Name only contains Alphabets." });
+          .send({ status: false, message: "Name can only contain Alphabets." });
   
       if (!phone)
         return res
           .status(400)
-          .send({ status: false, message: "Please enter phone in body." });
+          .send({ status: false, message: "phone is required." });
   
       if (!isValidNo(phone))
         return res
@@ -75,22 +77,22 @@ module.exports.createUser = async function (req, res) {
         });
       
         
-      let findPhone = await userModel.findOne({ phone: phone });
+      let findPhone = await checkPhone(phone);
+      
       if (findPhone) {
         return res
           .status(400)
           .send({ status: false, message: "User already registerd." });
       }
-      let findEmail = await userModel.findOne({ email: email });
+      let findEmail = await Email(email)
       if (findEmail) {
         return res
           .status(400)
           .send({ status: false, message: "Email already registerd." });
       }
-      let createData = await userModel.create(body);
-      return res
-        .status(201)
-        .send({ status: true, message: "Success", data: createData });
+      let createData = await createUser(body)
+     
+     return res.status(201).send({ status: true, message: "Success", data: createData });
     } catch (err) {
       return res.status(500).send({ status: false, message: err.message });
     }
@@ -109,10 +111,7 @@ module.exports.createUser = async function (req, res) {
             message: "Please enter Email Id and Password.",
           });
   
-      let userData = await userModel.findOne({
-        email: email,
-        password: password,
-      });
+      let userData = await findUser(email,password);
       if (!userData)
         return res
           .status(400)
