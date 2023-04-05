@@ -8,8 +8,23 @@ const {
   } = require("../utils/helper/validator");
 
 const jwt = require("jsonwebtoken")
+const bcrypt = require('bcrypt');
 
 const {Email,createUser,findUser,checkPhone} = require("../services/userser")
+
+// password hashing
+const passwordHashing =async function(password){
+  return new Promise((resolve, reject) => {
+      const saltRounds = 10 //default
+      bcrypt.hash(password, saltRounds, function (err, hash) {
+  
+        if (err) return  reject(res.status(400).send({ status: false, message: "invalid password" }))
+        else return resolve(hash)
+          
+      });
+  })
+}
+
 
 module.exports.createUser = async function (req, res) {
     try {
@@ -18,7 +33,7 @@ module.exports.createUser = async function (req, res) {
       if (Object.keys(body).length == 0|| !Firstname || !Lastname || !phone || !email || !password) {
         return res
           .status(400)
-          .send({ status: false, message: "Please enter some data in body." });
+          .send({ status: false, message: "Mandatory fields missing" });
       }
     
       if (!Firstname)
@@ -75,6 +90,7 @@ module.exports.createUser = async function (req, res) {
           message:
             "Password must be in the Range of 8 to 15 , please enter atleast 1 lowercase, 1 uppercase, 1 numeric character and one special character.",
         });
+        body.password= await passwordHashing(body.password)
       
         
       let findPhone = await checkPhone(phone);
@@ -111,25 +127,36 @@ module.exports.createUser = async function (req, res) {
             message: "Please enter Email Id and Password.",
           });
   
-      let userData = await findUser(email,password);
+      let userData = await findUser(email);
       if (!userData)
         return res
           .status(400)
           .send({ status: false, message: "Invalid Email or Password." });
+
+          bcrypt.compare(data.password, userData.password, function (err, result) {  // Compare
+            // if passwords match
+            if (result) {
+              let token = jwt.sign({ userId: userData._id }, "Secret-key", { expiresIn: "24h" })
+              return res.status(200).send({ status: true, message: "User login successfull", data: { userId: userData._id} })
+            }
+            // if passwords do not match
+            else {
+              return res.status(400).send({ status: false, message: "Invalid email or password" })
+            }
+            
+          })
   
-      let token = jwt.sign(
-        { userId: userData._id.toString() },
-        "AAAB-Project04",
-        { expiresIn: "24h" }
-      );
+      
+      // res.cookie("jwtoken", token,{
+      //   expiresIn: new Date(Date.now() + 25636541000),
+      //   httpOnly:true
+      // })
   
-      return res
-        .status(200)
-        .send({ status: true, message: "Success", data: token });
+      
     } catch (err) {
       return res
         .status(500)
-        .send({ status: false, message: "Login User", Error: err.message });
+        .send({ status: false, message: "Login User", Error: err.message })
     }
   };
   
