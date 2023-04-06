@@ -30,6 +30,11 @@ const isValidateEmail = function (email) {
   
     return true;
   };
+
+  const isValidRating = function (number) {
+    const validnumber = /^[0-5](\.[0-9])?$/;
+    return validnumber.test(number);
+  };
   
   
   module.exports = {
@@ -38,5 +43,6 @@ const isValidateEmail = function (email) {
     isValidName,
     isValidNo,
     isValidString,
+    isValidRating
     
   };

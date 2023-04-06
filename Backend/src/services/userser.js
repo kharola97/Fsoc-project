@@ -1,36 +1,46 @@
 const userModel = require("../models/Usermodel")
 
-
-module.exports.createUser = function(user){
+module.exports.createData =  async (user) =>{
     try {
-        return userModel.create(user)
+        
+        let result = await userModel.create(user)
+        console.log(result,"inside create")
+        return result
+    } catch (error) {
+        throw error
+    }
+}
+
+module.exports.Email =  function(email){
+    try {
+        return  userModel.findOne({email:email})
     } catch (error) {
         return res.status(500).send({status:false,message:error.message})
     }
 }
 
-module.exports.Email = function(email){
-    try {
-        return userModel.findOne({email:email})
-    } catch (error) {
-        return res.status(500).send({status:false,message:error.message})
-    }
-}
 
-
-module.exports.findUser = function(email,password){
+module.exports.findUser =  function(email){
     try{
-        return userModel.findOne({email:email,password:password})
+        return  userModel.findOne({email:email})
     }
     catch (error) {
         return res.status(500).send({status:false,message:error.message})
     }
 }
 
-module.exports.checkPhone = function(phone){
+module.exports.checkPhone =  function(phone){
     try{
-        console.log(phone)
-        return userModel.findOne({phone:phone})
+        
+        return  userModel.findOne({phone:phone})
+    }
+    catch (error) {
+        return res.status(500).send({status:false,message:error.message})
+    }
+}
+module.exports.findUserId = async function(userId){
+    try{
+        return  userModel.findById(userId)
     }
     catch (error) {
         return res.status(500).send({status:false,message:error.message})

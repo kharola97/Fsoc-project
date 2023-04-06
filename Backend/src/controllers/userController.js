@@ -1,4 +1,3 @@
-const userModel = require("../models/Usermodel")
 const {
     isValidateEmail,
     passwordVal,
@@ -9,8 +8,8 @@ const {
 
 const jwt = require("jsonwebtoken")
 const bcrypt = require('bcrypt');
-
-const {Email,createUser,findUser,checkPhone} = require("../services/userser")
+const services = require("../services/userser")
+// const {Email,create,findUser,checkPhone} = require("../services/userser")
 
 // password hashing
 const passwordHashing =async function(password){
@@ -27,91 +26,90 @@ const passwordHashing =async function(password){
 
 
 module.exports.createUser = async function (req, res) {
-    try {
+  
       let body = req.body;
-      const {  Firstname, Lastname, phone, email, password } = body;
-      if (Object.keys(body).length == 0|| !Firstname || !Lastname || !phone || !email || !password) {
+      
+      const {  Fullname,  number, email, password,cpassword } = body;
+      if (Object.keys(body).length == 0) {
         return res
           .status(400)
           .send({ status: false, message: "Mandatory fields missing" });
       }
+      
     
-      if (!Firstname)
+      if (Fullname=="")
         return res
           .status(400)
           .send({ status: false, message: "Please enter name in body." });
-  
-      if (!isValidName(Firstname.trim()))
+          
+      if (!isValidName(Fullname.trim()))
         return res
           .status(400)
           .send({ status: false, message: "Name can only contains Alphabets." });
       
-          if (!Lastname)
-        return res
-          .status(400)
-          .send({ status: false, message: "last name is required." });
+          
+          
   
-      if (!isValidName(Lastname.trim()))
-        return res
-          .status(400)
-          .send({ status: false, message: "Name can only contain Alphabets." });
-  
-      if (!phone)
+      if (number == "")
         return res
           .status(400)
           .send({ status: false, message: "phone is required." });
-  
-      if (!isValidNo(phone))
-        return res
+          if (!isValidNo(number))
+          return res
           .status(400)
           .send({
             status: false,
             message: "Please enter a valid Mobile number.",
           });
-  
-      if (!email)
-        return res
+          
+          
+          if (email=="")
+          return res
           .status(400)
           .send({ status: false, message: "Please enter email in body." });
-  
-      if (!isValidateEmail(email.trim()))
-        return res
+          
+          if (!isValidateEmail(email.trim()))
+          return res
           .status(400)
           .send({ status: false, message: "Please enter valid email." });
-  
-      if (!password)
-        return res
+          
+          if (password=="")
+          return res
           .status(400)
           .send({ status: false, message: "Please enter password in body." });
-  
-      if (!passwordVal(password.trim()))
-        return res.status(400).send({
-          status: false,
-          message:
+          if (cpassword=="")
+          return res
+          .status(400)
+          .send({ status: false, message: "Please enter password in body." });
+          
+          if (!passwordVal(password.trim()))
+          return res.status(400).send({
+            status: false,
+            message:
             "Password must be in the Range of 8 to 15 , please enter atleast 1 lowercase, 1 uppercase, 1 numeric character and one special character.",
-        });
-        body.password= await passwordHashing(body.password)
-      
+          });
+          body.password= await passwordHashing(body.password)
+          
+          
+          let findPhone = await services.checkPhone(number);
+          
+          if (findPhone) {
+            return res
+            .status(400)
+            .send({ status: false, message: "User already registerd." });
+          }
+          let findEmail = await services.Email(email)
+          if (findEmail) {
+            return res
+            .status(400)
+            .send({ status: false, message: "Email already registerd." });
+          }
+          console.log(body,"above createdata")
+          
+          let createData = await services.createData(body)
+          console.log(createData,"create is here ")
+          return res.status(201).send({ status: true, message: "Success", data: createData });
         
-      let findPhone = await checkPhone(phone);
-      
-      if (findPhone) {
-        return res
-          .status(400)
-          .send({ status: false, message: "User already registerd." });
-      }
-      let findEmail = await Email(email)
-      if (findEmail) {
-        return res
-          .status(400)
-          .send({ status: false, message: "Email already registerd." });
-      }
-      let createData = await createUser(body)
-     
-     return res.status(201).send({ status: true, message: "Success", data: createData });
-    } catch (err) {
-      return res.status(500).send({ status: false, message: err.message });
-    }
   };
 
   module.exports.loginUser = async function (req, res) {
@@ -133,10 +131,14 @@ module.exports.createUser = async function (req, res) {
           .status(400)
           .send({ status: false, message: "Invalid Email or Password." });
 
-          bcrypt.compare(data.password, userData.password, function (err, result) {  // Compare
+          bcrypt.compare(data.password, userData.password, function (err, result) {  // Compare .
             // if passwords match
             if (result) {
               let token = jwt.sign({ userId: userData._id }, "Secret-key", { expiresIn: "24h" })
+              res.cookie("jwtoken", token,{
+                expiresIn:new Date(Date.now() + 25634587000),
+                httpOnly:true
+              })
               return res.status(200).send({ status: true, message: "User login successfull", data: { userId: userData._id} })
             }
             // if passwords do not match

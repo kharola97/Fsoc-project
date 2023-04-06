@@ -5,6 +5,10 @@ const { connectDatabase} = require("./src/db/databaseConnection")
 app.use(express.json())
 app.use("/", router)
 require("dotenv").config()
+const mult = require('multer')
+
+
+app.use(mult().any())
 
 
 const PORT = process.env.PORT
