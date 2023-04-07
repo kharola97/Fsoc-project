@@ -66,21 +66,21 @@ module.exports.createUser = async function (req, res) {
           if (email=="")
           return res
           .status(400)
-          .send({ status: false, message: "Please enter email in body." });
+          .send({ status: false, message: "Please enter email" });
           
           if (!isValidateEmail(email.trim()))
           return res
           .status(400)
           .send({ status: false, message: "Please enter valid email." });
-          
+           body.email = email.toLowerCase()
           if (password=="")
           return res
           .status(400)
-          .send({ status: false, message: "Please enter password in body." });
+          .send({ status: false, message: "Please enter password." });
           if (cpassword=="")
           return res
           .status(400)
-          .send({ status: false, message: "Please enter password in body." });
+          .send({ status: false, message: "Please enter password" });
           
           if (!passwordVal(password.trim()))
           return res.status(400).send({
@@ -104,15 +104,15 @@ module.exports.createUser = async function (req, res) {
             .status(400)
             .send({ status: false, message: "Email already registerd." });
           }
-          console.log(body,"above createdata")
+         
           
           let createData = await services.createData(body)
-          console.log(createData,"create is here ")
+         
           return res.status(201).send({ status: true, message: "Success", data: createData });
         
   };
 
-  module.exports.loginUser = async function (req, res) {
+  module.exports.loginUser = async  (req, res)=> {
     try {
       let data = req.body;
       const { email, password } = data;
@@ -125,7 +125,7 @@ module.exports.createUser = async function (req, res) {
             message: "Please enter Email Id and Password.",
           });
   
-      let userData = await findUser(email);
+      let userData = await services.findUser(email);
       if (!userData)
         return res
           .status(400)
@@ -137,9 +137,11 @@ module.exports.createUser = async function (req, res) {
               let token = jwt.sign({ userId: userData._id }, "Secret-key", { expiresIn: "24h" })
               res.cookie("jwtoken", token,{
                 expiresIn:new Date(Date.now() + 25634587000),
-                httpOnly:true
+                //httpOnly:true, //Setting httpOnly to true prevents client-side JavaScript code from accessing the cookie through the document.cookie
+                //secure: true // only send cookie over HTTPS
               })
-              return res.status(200).send({ status: true, message: "User login successfull", data: { userId: userData._id} })
+             
+              return res.status(200).send({ status: true, message: "Token have been generated", data: { userId: userData._id} })
             }
             // if passwords do not match
             else {

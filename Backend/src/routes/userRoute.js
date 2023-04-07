@@ -7,7 +7,7 @@ const commentController = require("../controllers/commentcontroller")
 
 router.post("/register", userController.createUser);
 router.post("/login", userController.loginUser);
-router.post("/recipe", recipeController.createRecipe)
+router.post("/recipe/:userId", recipeController.createRecipe)
 router.post("/comment", commentController.comment)
 
 

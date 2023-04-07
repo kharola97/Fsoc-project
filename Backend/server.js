@@ -6,8 +6,9 @@ app.use(express.json())
 app.use("/", router)
 require("dotenv").config()
 const mult = require('multer')
+const cookieParser = require('cookie-parser');
 
-
+app.use(cookieParser());
 app.use(mult().any())
 
 
