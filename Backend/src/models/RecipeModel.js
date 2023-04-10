@@ -34,9 +34,13 @@ const recipeSchema = new mongoose.Schema({
         ref: "user"
       },
     cookingtime :{
-        type: String,
+        type: Number,
         required:true,
-        trim:true}
+        trim:true},
+    isDeleted:{
+          type:Boolean,
+          default:false
+        }
 },{ timestamps: true })
 
 module.exports = mongoose.model("recipe", recipeSchema);   

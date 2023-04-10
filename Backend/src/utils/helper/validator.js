@@ -14,6 +14,11 @@ const isValidateEmail = function (email) {
     const nameRegex = /^[a-zA-Z_ ]+$/;
     return nameRegex.test(name);
   };
+
+  const isValidTime = function(time){
+    const timeRegex = /^\d+$/
+    return timeRegex.test(time)
+  }
   
   const isValidNo = function (number) {
     const validnumber = /^[6-9]\d{9}$/;
@@ -30,7 +35,10 @@ const isValidateEmail = function (email) {
   
     return true;
   };
-
+const isValidData = (input)=>{
+  const validData = /^[\w\s.,!?"'-]+$/
+  return validData.test(input)
+}
   const isValidRating = function (number) {
     const validnumber = /^[0-5](\.[0-9])?$/;
     return validnumber.test(number);
@@ -43,6 +51,7 @@ const isValidateEmail = function (email) {
     isValidName,
     isValidNo,
     isValidString,
-    isValidRating
-    
+    isValidRating,
+    isValidData,
+    isValidTime
   };

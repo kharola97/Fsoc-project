@@ -9,6 +9,7 @@ router.post("/register", userController.createUser);
 router.post("/login", userController.loginUser);
 router.post("/recipe/:userId", recipeController.createRecipe)
 router.post("/comment", commentController.comment)
+router.get("/getrecipe", recipeController.getRecipe)
 
 
 

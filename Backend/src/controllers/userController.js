@@ -125,7 +125,7 @@ module.exports.createUser = async function (req, res) {
             message: "Please enter Email Id and Password.",
           });
   
-      let userData = await services.findUser(email);
+      let userData = await services.Email(email);
       if (!userData)
         return res
           .status(400)

@@ -2,32 +2,21 @@ const userModel = require("../models/Usermodel")
 
 module.exports.createData =  async (user) =>{
     try {
-        
-        let result = await userModel.create(user)
-        console.log(result,"inside create")
-        return result
-    } catch (error) {
+        return await userModel.create(user)
+     } catch (error) {
         throw error
     }
 }
 
-module.exports.Email =  function(email){
+module.exports.Email =  async (email)=>{
     try {
-        return  userModel.findOne({email:email})
+        return await  userModel.findOne({email:email})
     } catch (error) {
         return res.status(500).send({status:false,message:error.message})
     }
 }
 
 
-module.exports.findUser =  function(email){
-    try{
-        return  userModel.findOne({email:email})
-    }
-    catch (error) {
-        return res.status(500).send({status:false,message:error.message})
-    }
-}
 
 module.exports.checkPhone =  function(phone){
     try{

@@ -4,6 +4,8 @@ const router = require("./src/routes/userRoute")
 const { connectDatabase} = require("./src/db/databaseConnection")
 app.use(express.json())
 app.use("/", router)
+
+
 require("dotenv").config()
 const mult = require('multer')
 const cookieParser = require('cookie-parser');
