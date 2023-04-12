@@ -5,17 +5,16 @@ const ObjectId = mongoose.Schema.Types.ObjectId
 const commentSchema = new mongoose.Schema({
     userId: {
         type: ObjectId,
-        required: true,
         ref: "user"
       },
       recipeId: {
         type: ObjectId,
-        required: true,
         ref: "recipe"
       },
       comment:{
-        type:String,
-        trim :true
+        type:[String],
+        trim :true,
+      required:true
       },
       isDeleted:{
         type:Boolean,

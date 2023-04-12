@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
+
 const recipeSchema = new mongoose.Schema({
 
     dishname : {
@@ -24,15 +25,13 @@ const recipeSchema = new mongoose.Schema({
         type: Number,
         default: 0
       },
-      commentsId: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment'
-      }],
+     
     userId: {
         type: ObjectId,
         required: true,
         ref: "user"
       },
+      
     cookingtime :{
         type: Number,
         required:true,

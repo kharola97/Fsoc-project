@@ -1,8 +1,8 @@
-const isValidateEmail = function (email) {
+const isValidateEmail = (email)=> {
     const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return re.test(email);
   };
-  const passwordVal = function (password) {
+  const passwordVal = (password)=> {
     var strongRegex = new RegExp(
       "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,15}$"
     );
@@ -10,22 +10,22 @@ const isValidateEmail = function (email) {
       at least one special character, range between 8-12*/
     return strongRegex.test(password);
   };
-  const isValidName = function (name) {
+  const isValidName = (name) =>{
     const nameRegex = /^[a-zA-Z_ ]+$/;
     return nameRegex.test(name);
   };
 
-  const isValidTime = function(time){
+  const isValidTime = (time)=>{
     const timeRegex = /^\d+$/
     return timeRegex.test(time)
   }
   
-  const isValidNo = function (number) {
+  const isValidNo = (number)=> {
     const validnumber = /^[6-9]\d{9}$/;
     return validnumber.test(number);
   };
   
-  const isValidString = function (input) {
+  const isValidString = (input)=> {
     if (typeof input == "number" || input == null || input == undefined) {
       return false;
     }
@@ -39,7 +39,7 @@ const isValidData = (input)=>{
   const validData = /^[\w\s.,!?"'-]+$/
   return validData.test(input)
 }
-  const isValidRating = function (number) {
+  const isValidRating = (number) =>{
     const validnumber = /^[0-5](\.[0-9])?$/;
     return validnumber.test(number);
   };

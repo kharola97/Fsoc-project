@@ -38,3 +38,21 @@ module.exports.getFilteredRecipe = async (filter)=>{
     }
 }
 
+module.exports.updateRecipe = async(userId,data) =>{
+    try {
+        
+        return await recipeModel.findOneAndUpdate({userId:userId},{...data},{new:true})
+    } catch (error) {
+        return ({status:false,message:error.message})
+    }
+}
+
+
+module.exports.getAllRecipeByUser = async(userId)=>{
+    try {
+         return await recipeModel.find({userId:userId})
+    } catch (error) {
+        return ({status:false,message:error.message})
+
+    }
+}
