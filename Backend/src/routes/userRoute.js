@@ -17,15 +17,24 @@ router.get("/getuserdetails/:userId",authentication,authorization, userControlle
 //api to get recipe created by user
 router.get("/getRecipeByUser/:userId", recipeController.getRecipeByUser)
 //api for user to add recipe
-router.post("/recipe/:userId", authentication,authorization, recipeController.createRecipe)
+router.post("/recipe/:userId",authentication,authorization,  recipeController.createRecipe)
 //api for user to get the recipe
 router.get("/getrecipe/:userId",  recipeController.getRecipe)
+//api to get recipe by recipeId
+router.get("/recipeById/:recipeId", recipeController.recipeById)
 //api to update the recipe
 router.put("/updateRecipe/:userId/:recipeId",authentication,authorization, recipeController.updateRecipe)
+
+//api to delete the recipe
+router.delete("/deleteRecipe/:recipeId/:userId",authentication,authorization, recipeController.deleteRecipe)
 //api for user to post comment
-router.post("/comment/:userId/:recipeId" , commentController.comment )
+router.post("/comment/:userId/:recipeId" ,authentication, commentController.comment )
 //api for user to get comments
 router.get("/getcomment/:recipeId", commentController.getComment)
+//api to delete the comment
+router.delete("/deletecomment/:userId/:recipeId/:commentId",authentication,authorization, commentController.deleteComment)
+
+
 
 
 router.all("/*", function (req, res) {

@@ -21,6 +21,7 @@ const isValidateEmail = (email)=> {
   }
   
   const isValidNo = (number)=> {
+    
     const validnumber = /^[6-9]\d{9}$/;
     return validnumber.test(number);
   };

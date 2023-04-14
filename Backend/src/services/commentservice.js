@@ -11,8 +11,9 @@ module.exports.createComment = async (recipe)=>{
 
 module.exports.deleteComment = async (commentId)=>{
     try {
-        
-        return await commentModel.findOneAndUpdate({_id:commentId},{$set:{isDeleted:true}})
+           
+            return await commentModel.findOneAndUpdate({_id:commentId},{$set:{isDeleted:true}},{new:true})
+           
     } catch (error) {
         return ({status:false,message:error.message})
     }
@@ -21,7 +22,7 @@ module.exports.deleteComment = async (commentId)=>{
 module.exports.recipeComment =  async (recipeId)=>{
     try {
         
-        return await commentModel.findOne({recipeId:recipeId})
+        return await commentModel.findOne({recipeId:recipeId , isDeleted:false})
     } catch (error) {
         return ({status:false,message:error.message})
     }
@@ -29,7 +30,7 @@ module.exports.recipeComment =  async (recipeId)=>{
 
 module.exports.findComment = async (userId,recipeId)=>{
     try {
-          return await commentModel.findOne({userId:userId,recipeId:recipeId})
+          return await commentModel.findOne({userId:userId,recipeId:recipeId,isDeleted:false})
     } catch (error) {
         return ({status:false,message:error.message})
     }
@@ -39,7 +40,16 @@ module.exports.findComment = async (userId,recipeId)=>{
 
 module.exports.updateComment = async (Id,comments)=>{
     try {
-          return await commentModel.findOneAndUpdate({_id:Id},{comment:comments},{new:true})
+          return await commentModel.findOneAndUpdate({_id:Id,isDeleted:false},{comment:comments},{new:true})
+    } catch (error) {
+        return ({status:false,message:error.message})
+
+    }
+}
+
+module.exports.removeOneComment = async(id,text)=>{
+    try {
+        return await commentModel.findOneAndUpdate({_id:id,isDeleted:false},{comment:text},{new:true})
     } catch (error) {
         
     }

@@ -31,11 +31,15 @@ const recipeSchema = new mongoose.Schema({
         required: true,
         ref: "user"
       },
-      
+    
     cookingtime :{
         type: Number,
         required:true,
         trim:true},
+    isPublic:{
+        type:Boolean,
+        
+        },
     isDeleted:{
           type:Boolean,
           default:false

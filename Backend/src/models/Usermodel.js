@@ -23,10 +23,6 @@ const userSchema = new mongoose.Schema(
         type: String,
         required: true  
       },
-      cpassword: {
-        type: String,
-        required: true  
-      },
       isDeleted:{
         type:Boolean,
         default:false
