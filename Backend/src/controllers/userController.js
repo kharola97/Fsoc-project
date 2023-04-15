@@ -22,7 +22,7 @@ const passwordHashing = async function (password) {
 module.exports.createUser = async function (req, res) {
   try {
     let body = req.body;
-    
+     
     const { Fullname, number, email, password} = body;
     if (Object.keys(body).length == 0) {
       return res.status(400).send({ status: false, message: "Mandatory fields missing" });

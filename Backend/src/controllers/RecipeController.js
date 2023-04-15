@@ -14,7 +14,7 @@ module.exports.createRecipe = async function (req, res) {
     let data = req.body;
     const userId = req.params.userId;
     data.userId = userId;
-    console.log(data)
+    
    const {dishname,cookingtime,ingredients,description,instructions,rating, } = data;
     if (Object.keys(data).length == 0) {return res.status(400).send({ status: false, message: "Mandatory fields missing again" });}
      data.dishname = dishname.trim()
@@ -53,16 +53,14 @@ module.exports.createRecipe = async function (req, res) {
   }
 };
 
-//dishname,description,ingredients,instructions,rating,cookingtime
+
 
 module.exports.getRecipe = async function (req, res) {
   try {
     let data = req.query;
     let userId = req.params.userId;
     if (!mongoose.Types.ObjectId.isValid(userId))
-      return res
-        .status(400)
-        .send({ status: false, message: "user is not valid" });
+      return res.status(400).send({ status: false, message: "user is not valid" });
     if (Object.keys(data).length == 0) {
       let Recipe = await getAllRecipe();
 
