@@ -1,17 +1,19 @@
 const express = require("express")
 const app = express()
+const cors = require('cors')
 const router = require("./src/routes/userRoute")
 const { connectDatabase} = require("./src/db/databaseConnection")
 app.use(express.json())
 app.use("/", router)
+app.use(cors())
 
 
 require("dotenv").config()
-const mult = require('multer')
+
 const cookieParser = require('cookie-parser');
 
 app.use(cookieParser());
-app.use(mult().any())
+
 
 
 const PORT = process.env.PORT
