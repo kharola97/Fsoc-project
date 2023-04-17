@@ -24,7 +24,7 @@ app.use((req, res, next) => {
       "X-Requested-With,content-type"
     );
     res.setHeader("Access-Control-Allow-Credentials", true);
-    console.log("hello")
+   
     next();
   });
 

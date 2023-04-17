@@ -43,7 +43,7 @@ module.exports.createRecipe = async function (req, res) {
       return res.status(400).send({ status: false, message: "Invalid  ID" });
     }
 
-    if (!isValidRating(rating.trim()))
+    if (!isValidRating(rating))
       return res.status(400).send({ status: false, message: "Rating can only be from 0-5" });
 
     let finalRecipe = await createRecipe(data);
