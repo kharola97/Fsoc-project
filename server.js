@@ -4,7 +4,7 @@ const cors = require('cors')
 const router = require("./src/routes/userRoute")
 const { connectDatabase} = require("./src/db/databaseConnection")
 app.use(express.json())
-app.use("/", router)
+
 app.use(cors())
 
 
@@ -24,10 +24,11 @@ app.use((req, res, next) => {
       "X-Requested-With,content-type"
     );
     res.setHeader("Access-Control-Allow-Credentials", true);
+    console.log("hello")
     next();
   });
 
-
+  app.use("/", router)
 
 const PORT = process.env.PORT
 
