@@ -15,7 +15,7 @@ module.exports.createRecipe = async function (req, res) {
     const userId = req.params.userId;
     data.userId = userId;
     
-   const {dishname,cookingtime,ingredients,description,instructions,rating, } = data;
+   const {dishname,cookingtime,ingredients,description,instructions } = data;
     if (Object.keys(data).length == 0) {return res.status(400).send({ status: false, message: "Mandatory fields missing again" });}
      data.dishname = dishname.trim()
     if (!isValidName(data.dishname))return res.status(400).send({ status: false, message: "Dish name shoulb be a string type" });
@@ -43,10 +43,7 @@ module.exports.createRecipe = async function (req, res) {
       return res.status(400).send({ status: false, message: "Invalid  ID" });
     }
 
-    if (!isValidRating(rating))
-      return res.status(400).send({ status: false, message: "Rating can only be from 0-5" });
-
-    let finalRecipe = await createRecipe(data);
+   let finalRecipe = await createRecipe(data);
     return res.status(201).send({ status: true, message: "Success", data: finalRecipe });
   } catch (error) {
     res.status(500).send({ status: false, message: error.message });
@@ -59,7 +56,7 @@ module.exports.getRecipe = async function (req, res) {
   try {
     let data = req.query;
     let userId = req.params.userId;
-    console.log(userId)
+    
     if (!mongoose.Types.ObjectId.isValid(userId))
       return res.status(400).send({ status: false, message: "user is not valid" });
     if (Object.keys(data).length == 0) {
@@ -75,10 +72,7 @@ module.exports.getRecipe = async function (req, res) {
     if (data.ingredients) {
       filter.ingredients = data.ingredients;
     }
-    if (data.rating) {
-      filter.rating = data.rating;
-    }
-
+   
     if (data.cookingtime) {
       filter.cookingtime = { $lte: data.cookingtime };
     }
@@ -172,16 +166,12 @@ module.exports.updateRecipe = async (req, res) => {
       return res.status(400).send({ status: false, message: "Invalid  ID" });
     }
 
-    if (rating) {
-      if (!isValidRating(rating))return res.status(400).send({ status: false, message: "Rating can only be from 0-5" });
-      updatedData.rating = rating;
-    }
+  
     if(typeof(isPublic)=="boolean"){
       updatedData.isPublic = isPublic
     }
-    console.log(updatedData.isPublic)
-    let updatedRecipe = await updateRecipe(userId, updatedData);
-     
+    let updatedRecipe = await updateRecipe(recipeId, updatedData);
+     console.log(updateRecipe,"r")
     return res.status(201).send({ status: true, message: "Success", data: updatedRecipe });
   } catch (error) {
     res.status(500).send({ status: false, message: error.message });

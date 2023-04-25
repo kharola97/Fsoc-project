@@ -81,7 +81,7 @@ module.exports.loginUser = async (req, res) => {
   try {
     let data = req.body;
     const { email, password } = data;
-
+   
     if (!email || !password)
       return res.status(400).send({status: false,message: "Please enter Email Id and Password.",});
      data.email = email.trim()
@@ -97,10 +97,8 @@ module.exports.loginUser = async (req, res) => {
         let token = jwt.sign({ userId: userData._id }, process.env.SECRET_KEY, {
           expiresIn: "24h",
         });
-        res.cookie("jwtoken", token, {
-          expiresIn: new Date(Date.now() + 25634587),
-        });
-        return res.status(200).send({status: true,message: "Token have been generated",data: { userId: userData._id },});
+        
+        return res.status(200).send({status: true,message: "Token have been generated",data: { userId: userData._id,token: token, },});
       }
       // if passwords do not match
       else {

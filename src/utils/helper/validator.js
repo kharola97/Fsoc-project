@@ -41,7 +41,7 @@ const isValidData = (input)=>{
   return validData.test(input)
 }
   const isValidRating = (number) =>{
-    const validnumber = /^[0-5](\.[0-9])?$/;
+    const validnumber = /^[0-5]$/;
     return validnumber.test(number);
   };
   

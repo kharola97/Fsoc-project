@@ -38,10 +38,10 @@ module.exports.getFilteredRecipe = async (filter)=>{
     }
 }
 
-module.exports.updateRecipe = async(userId,data) =>{
+module.exports.updateRecipe = async(recipeId,data) =>{
     try {
         
-        return await recipeModel.findOneAndUpdate({userId:userId,isDeleted:false},{...data},{new:true})
+        return await recipeModel.findOneAndUpdate({_id:recipeId,isDeleted:false},{...data},{new:true})
     } catch (error) {
         return ({status:false,message:error.message})
     }

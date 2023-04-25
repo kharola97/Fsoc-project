@@ -16,6 +16,10 @@ const commentSchema = new mongoose.Schema({
         trim :true,
       required:true
       },
+      // rating:{
+      //   type:Number,
+      //   required:true
+      // },
       isDeleted:{
         type:Boolean,
         default:false

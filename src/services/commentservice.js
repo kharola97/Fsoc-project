@@ -22,7 +22,7 @@ module.exports.deleteComment = async (commentId)=>{
 module.exports.recipeComment =  async (recipeId)=>{
     try {
         
-        return await commentModel.findOne({recipeId:recipeId , isDeleted:false})
+        return await commentModel.find({recipeId:recipeId , isDeleted:false}).populate("userId")
     } catch (error) {
         return ({status:false,message:error.message})
     }
@@ -50,6 +50,14 @@ module.exports.updateComment = async (Id,comments)=>{
 module.exports.removeOneComment = async(id,text)=>{
     try {
         return await commentModel.findOneAndUpdate({_id:id,isDeleted:false},{comment:text},{new:true})
+    } catch (error) {
+        
+    }
+}
+
+module.exports.findByCommentId = async(commentId)=>{
+    try {
+        return await commentModel.findById({_id:commentId,isDeleted:false})
     } catch (error) {
         
     }

@@ -6,10 +6,11 @@ module.exports.authentication = async function (req, res, next) {
   try {
     
     //getting the token that we set in cookie when the user logs in
-    let token = req.headers["cookie"];
+    let token = req.headers["authorization"];
+   
     //Token wa ssaved with prefix jwtoken= so we need to remove that to verify the token
     const actualToken = token.replace("jwtoken=", "").replace("=", "");
-    
+   
     if (!actualToken) {
 
       return res.status(400).send({ status: false, message: "token is required in headers" });
@@ -25,7 +26,7 @@ module.exports.authentication = async function (req, res, next) {
       } else {
 
         req.userId = decodedToken.userId
-
+        
         next();
       }
 
