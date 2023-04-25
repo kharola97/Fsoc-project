@@ -59,6 +59,7 @@ module.exports.getRecipe = async function (req, res) {
   try {
     let data = req.query;
     let userId = req.params.userId;
+    console.log(userId)
     if (!mongoose.Types.ObjectId.isValid(userId))
       return res.status(400).send({ status: false, message: "user is not valid" });
     if (Object.keys(data).length == 0) {
